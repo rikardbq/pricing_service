@@ -1,8 +1,9 @@
 ### Running
 
-- py script to automate, very soon
-
-- `>_ $ dotnet run --launch-profile http`
+- Start the dotnet backend `>_ $ dotnet run --launch-profile http`
+- Python
+  - ``>_ $ pip install requests``
+  - ``>_ $ python TestCases.py``
 - Manual steps
   - Populate in-memory database
   - adds 2 customers, id: 1, id: 2 and a bunch of other stuff.
