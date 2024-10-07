@@ -1,14 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
 using PriceCalculatorApi.Models;
-using PriceCalculatorApi.Services;
-using TodoApi.Models;
+using PriceCalculatorApi.Repositories;
 
 namespace pricing_service.Controllers
 {
@@ -16,25 +8,24 @@ namespace pricing_service.Controllers
   [ApiController]
   public class PriceCalculatorController : ControllerBase
   {
-    private readonly CustomerService _customerService;
+    private readonly PriceCalculatorRepository _priceCalculatorRepository;
 
-    public PriceCalculatorController(CustomerService customerService)
+    public PriceCalculatorController(PriceCalculatorRepository priceCalculatorRepository)
     {
-      _customerService = customerService;
+      _priceCalculatorRepository = priceCalculatorRepository;
     }
 
     // GET: api/PriceCalculator/GetCustomers
     [HttpGet("GetCustomers")]
     public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
     {
-      Console.WriteLine("GET DATA");
-      return await _customerService.GetCustomers();
+      return await _priceCalculatorRepository.GetCustomers();
     }
 
     [HttpGet("GetCustomers/{id}")]
     public async Task<ActionResult<Customer>> GetCustomerFromId(long id)
     {
-      var customer = await _customerService.GetCustomerFromId(id);
+      var customer = await _priceCalculatorRepository.GetCustomerFromId(id);
 
       if (customer.Value == null)
       {
@@ -49,14 +40,14 @@ namespace pricing_service.Controllers
     public async Task<ActionResult<long>> CalculatePrice(CalculatePriceRequest calculatePriceRequest)
     {
       string callingServiceName = Request.Headers["caller"].ToString();
-      var customer = await _customerService.GetCustomerFromId(calculatePriceRequest.Id);
+      var customer = await _priceCalculatorRepository.GetCustomerFromId(calculatePriceRequest.Id);
 
       if (customer == null)
       {
         return NotFound();
       }
 
-      var price = _customerService.CalculateTotalPriceForCustomer(
+      var price = _priceCalculatorRepository.CalculateTotalPriceForCustomer(
         customer.Value,
         calculatePriceRequest.Start,
         calculatePriceRequest.End,
@@ -69,16 +60,9 @@ namespace pricing_service.Controllers
     [HttpPost("CreateTestData")]
     public async Task<ActionResult<int>> CreateTestData()
     {
-      Console.WriteLine("CREATE");
-      _customerService.CreateCustomerData();
+      _priceCalculatorRepository.CreateTestData();
 
       return StatusCode(200);
-    }
-
-    // SAVE check
-    private bool TodoItemExists(long id)
-    {
-      return true; //_context.TodoItems.Any(e => e.Id == id);
     }
   }
 }

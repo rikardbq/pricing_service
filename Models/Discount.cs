@@ -6,5 +6,5 @@ public class Discount
   public int Amount { get; set; }
   public DateTime Start { get; set; }
   public DateTime End { get; set; }
-  public long ServiceId { get; set; }
+  public long ServicePlanId { get; set; }
 }

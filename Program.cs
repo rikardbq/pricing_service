@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PriceCalculatorApi.Models;
-using PriceCalculatorApi.Services;
+using PriceCalculatorApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PriceCalculatorContext>(opt =>
     opt.UseInMemoryDatabase("PriceCalculatorDB"));
-builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<PriceCalculatorRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

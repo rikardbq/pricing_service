@@ -4,5 +4,5 @@ public class Customer
 {
   public long Id { get; set; }
   public int FreeDays { get; set; }
-  public List<ServicePlan> ServicePlans { get; }
+  public List<ServicePlan> ServicePlans { get; } = new List<ServicePlan>();
 }
